@@ -113,6 +113,6 @@ def predict_with_network(input_data):
 output = predict_with_network(input_data)
 print(output)
 
-
+#--------------- 2.1 the need for optimization --------------%
 
 
