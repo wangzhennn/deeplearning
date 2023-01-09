@@ -234,7 +234,7 @@ plt.xlabel('Iterations')
 plt.ylabel('Mean Squared Error')
 plt.show()
 
-#--------------- 2.3 backpropagation --------------%
+#--------------- 2.3/2.4 backpropagation --------------%
 #to calculate the slopes we need to optimize more complex DL models
 #allows gradient descent to update all weights in neural network (by gettting gradients for all weights)
 #comes from chain rule of calculus
@@ -243,6 +243,114 @@ plt.show()
 #💡backpropagation process
 #trying to estimate the slope of the loss function w.r.t each weight
 #do forward propagation to calculate predictions and errors
+#use backward propagation to calculate the slope of the loss function with respect to each weight
+#gradients for weight is product of: 
+         # 1) node value feeding into that weight
+         # 2) slope of activation function for the node being fed into
+         # 3) slope of loss function w.r.t output node
+#multiply the slope by the learning rate and subtract that from the current weights
+#keep going with the cycle until we get to a flat part
+
+#💡stochastic gradient descent
+#it is common to calculate slopes on only a subset of the data (a batch)
+#use a different batch of data to calculate the next update
+#start over from the beginning once all data is used
+#each time through the training data is called an epoch
+#when slopes are calculated on one batch at a time: stochastic gradient descent
+
+#--------------- 3.1 creating a Keras model --------------%
+#model building steps
+# 1) specify architecture
+# 2) compile the model: specify the loss function and some details about how optimization works
+# 3) fit the model
+# 4) use the model for prediction
+
+# 1) model specification
+import numpy as np
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
+
+predictors=np.loadtxt('prefictors_data.csv',delimiter=',')
+n_cols=predictors.shape[1]
+
+model=Sequential()
+model.add(Dense(100,activation='relu',input_shape=(n_cols,)))
+#which means it has n_cols items in each row of data, and any number of rows of data are acceptable as inputs
+model.add(Dense(100,activation='relu'))
+model.add(Dense(1))
+
+
+#dense layer: all of the nodes in the previous layer connect to all of the nodes in the current layer
+
+#===example===%
+# Import necessary modules
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
+
+# Save the number of columns in predictors: n_cols
+n_cols = predictors.shape[1]
+
+# Set up the model: model
+model = Sequential()
+
+# Add the first layer
+model.add(Dense(50,activation='relu',input_shape=(n_cols,)))
+
+# Add the second layer
+model.add(Dense(32,activation='relu'))
+
+# Add the output layer
+model.add(Dense(1))
+
+#--------------- 3.2 compiling and fitting a model --------------%
+#why need to compile the model
+#-specify the optimizer: many options and mathematically complex, 'Adam' is usually a good choice
+#-loss function: 'mean_squared_error' common for regression
+
+n_cols=predictors.shape[1]
+model=Sequential()
+model.add(Dense(100,activation='relu',input_shape=(n_cols,)))
+model.add(Dense(100,activation='relu'))
+model.add(Dense(1))
+model.compile(optimizer='adam',loss='mean_squared_error')
+
+#compiling and fitting a model
+# 1) applying backpropagation and gradient descent with your data to update the weights
+# 2) scaling data before fitting can ease optimization
+
+n_cols=predictors.shape[1]
+model=Sequential()
+model.add(Dense(100,activation='relu',input_shape=(n_cols,)))
+model.add(Dense(100,activation='relu'))
+model.add(Dense(1))
+model.compile(optimizer='adam',loss='mean_squared_error')
+model.fit(predictors,target)
+
+#--------------- 3.3 classification models --------------%
+
+#‘categorical_crossentropy' loss function
+#similar to log loss: lower is better
+#add metrics=['accuracy'] to compile step for easy-to-understand diagnostics
+#output layer has separate node for each possible outcome and uses 'softmax' activation
+
+from tensorflow.keras.utils import to_categorical
+
+data=pd.read_csv('basketball_shot_log.csv')
+predictors=data.drop(['shot_result'],axis=1).values
+target=to_categorical(data['shot_result'])
+
+model=Sequential()
+model.add(Dense(100,activation='relu',input_shape=(n_cols,)))
+model.add(Dense(100,activation='relu'))
+model.add(Dense(2,activation='softmax'))
+model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
+model.fit(predictors,target)
+
+
+
+
+
+
 
 
 
