@@ -346,9 +346,15 @@ model.add(Dense(2,activation='softmax'))
 model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
 model.fit(predictors,target)
 
+#--------------- 3.4 using models --------------%
 
-
-
+#saving, reloading and using the model
+from tensorflow.models import load_model
+model.save('model_file.h5')
+my_model=load_model('model_file.h5')
+predictions=my_model.predict(data_to_predict_with)
+probability_ture=predictions[:,1]
+my_model.summary()
 
 
 
