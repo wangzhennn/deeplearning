@@ -1,6 +1,7 @@
 #--------------- 1.1 --------------%
+#neural networks acount for interactions really well
 #3 layers: input/hidden/output layer
-#--------------- 1.2 forward propagation --------------%
+#--------------- 1.2   --------------%
 #- multiply -> add process
 #- dot product
 #- forward propagation for one data point at a time
@@ -19,11 +20,13 @@ output=(hidden_layer_values*weights['output']).sum()
 print(output)
 
 #--------------- 1.3 activation functions --------------%
-#activation functions allow models to capture the non-linear functions
+#activation functions: allow models to *capture the non-linear functions*
+#激活函数的作用就是把输入节点的加权和转化后输出
+#相反的是identity function
 
-#tanh activation function
+#tanh activation function: s-shaped function: 双曲正切函数
 
-#ReLU (Rectified Linear Activation)
+#ReLU (Rectified Linear Activation):神经网络激活函数
 
 import numpy as np
 input_data-np.array([2,3])
@@ -31,7 +34,7 @@ weights={'node_0':np.aray([3,3]),
          'node_1':np.aray([1,5]),
          'output':np.aray([2,-1])}
 node_0_input=(input_data*weights['node_0']).sum()
-node_0_output=np.tanh(node_0_input)
+node_0_output=np.tanh(node_0_input) #不同点在于这里，使用了激活函数对input进行转化
 node_1_input=(input_data*weights['node_1']).sum()
 node_1_output=np.tanh(node_1_input)
 hidden_layer_outputs=np.array([node_0_output,node_1_output])
@@ -85,7 +88,10 @@ for input_data_row in input_data:
 print(results)
 
 #--------------- 1.4 deeper networks --------------%
-#modeler doean't need to specify the interactions
+#representation learning: deep networks internally build representations of patterns in the data; partially replace the need for feature engineering; subsequent layers build increasingly sophisticated representations of raw data
+
+#DL
+#modeler doesn't need to specify the interactions
 #when you train the model, the neural network gets weights that find the relevant patterns to make better predictions
 
 # Multi-layer neural networks
@@ -115,12 +121,13 @@ print(output)
 
 #--------------- 2.1 the need for optimization --------------%
 #the change in weights can improve the model for the data point
-#loss function: agregates errors in predictions from many data points into single number. measure of model's predictive performance
+#loss function: aggregates errors in predictions from many data points into single number; measure of model's predictive performance; lower loss function value means a better model; the goal is to find the weights that give the lowest value for the loss function
 
 # squared error
 
-# gradient descent
+# gradient descent梯度下降
 #- start at random point
+#- draw the tangent line to the curve at the current point-->derivative
 #- until you are somewhere flat: find the slope, take a step downhill
 
 #======Example======%
@@ -178,12 +185,11 @@ print("Mean squared error with weights_1: %f" %mse_1)
 #subtract the slop from the current value
 #too big a steop might lead us astray
 
-#solution: learning rate--update each weight by subtracting learning rate*slope
+#solution: [learning rate]--update each weight by subtracting learning rate*slope
 
-#slope calculation
-#need to multiply
-#- slope of the loss function w.r.t value at teh node we feed into --> slope of mean-squared loss function w.r.t predictino: 2(predicted value -actual value=2error)
-#- the value of the node that feeds into our weight --> 
+#💡slope calculation, need to multiply:
+#- slope of the loss function w.r.t value at teh node we feed into --> slope of mean-squared loss function w.r.t prediction=2*(predicted value -actual value)=2*error
+#- the value of the node that feeds into our weight
 #- slope of the activition function w.r.t value we feed into
 
 #code to calculate slopes and update weights
@@ -195,10 +201,10 @@ learning_rate=0.01
 preds=(weights*input_data).sum()
 error=preds-target
 print(error)
-
+-----
 gradient=2*input_data*error
 gradient
-
+-----
 weights_updated=weights-learning_rate*gradient
 preds_updates=(weights_updated*input_data).sum()
 error_updated=pred_updated-target
@@ -228,12 +234,15 @@ plt.xlabel('Iterations')
 plt.ylabel('Mean Squared Error')
 plt.show()
 
+#--------------- 2.3 backpropagation --------------%
+#to calculate the slopes we need to optimize more complex DL models
+#allows gradient descent to update all weights in neural network (by gettting gradients for all weights)
+#comes from chain rule of calculus
+#important to understand the process, but you will generally use a library that implements this
 
-
-
-
-
-
+#💡backpropagation process
+#trying to estimate the slope of the loss function w.r.t each weight
+#do forward propagation to calculate predictions and errors
 
 
 
