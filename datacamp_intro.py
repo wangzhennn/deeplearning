@@ -347,7 +347,6 @@ model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accurac
 model.fit(predictors,target)
 
 #--------------- 3.4 using models --------------%
-
 #saving, reloading and using the model
 from tensorflow.models import load_model
 model.save('model_file.h5')
@@ -355,6 +354,21 @@ my_model=load_model('model_file.h5')
 predictions=my_model.predict(data_to_predict_with)
 probability_ture=predictions[:,1]
 my_model.summary()
+
+#--------------- 4.1 understanding model optimization --------------%
+#why the optimization is hard
+# 1) simultaneously optimizing 1000s of parameters with complex relationships
+# 2) updates may mot improve model meaningfully
+# 3) updates too small(if learning rate is low) or too large (if learning rate is high)
+
+def get_new_model(input_shape=input_shape):
+         model=Sequential()
+         model.add(Dense(100,activation='relu',input_shape=))
+
+
+
+
+
 
 
 
