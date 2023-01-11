@@ -363,16 +363,51 @@ my_model.summary()
 
 def get_new_model(input_shape=input_shape):
          model=Sequential()
-         model.add(Dense(100,activation='relu',input_shape=))
+         model.add(Dense(100,activation='relu',input_shape=input_shape))
+         model.add(Dense(2,activation='softmax'))
+         return(model)
 
+lr_to_rest=[.000001,0.01,1]
 
+#loop over leraning rates
+for lr in lr_to_test:
+         model=get_new_model()
+         my_optimizer=SGD(lr=lr)
+         model.compile(optimizer=my_optimizer,loss='categorical_cross')
+         model.fit(predictors,target)
 
+#The dying neuron problem
+#This problem occurs when a neuron takes a value less than 0 for all rows for your data
 
+#vanishing gradients
+#occurs when many layers have very small slopes (e.g. due to being on flat part of tanh curve)
 
+#--------------- 4.2 model validation --------------%
+#commonly use validation split rather than cross-validation
+#deep learning widely used on large datasets
+#single validation score is based on large amount of data, and is reliable
 
+model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
+model.fit(predictors,target,validation_split=0.3)
 
+#early stopping
+from tensorflow.keras.callbacks import EarlyStopping
+early_stopiing_monitor=EarlyStopping(patience=2) #2or3 are reasonable values for patience
+model.fit(predictors,target,validation_split=0.3,epochs=20,callbacks=[early_stopping_monitor])
 
+#--------------- 4.3 model capacity --------------%
+#model capacity or network capacity is closely related to the terms overfitting and underfitting
 
+#workflow💡 for optimizing model capacity
+# 1) start with a small network
+# 2) gradually increase capacity
+# 3) keep increasing capacity until validation score is no longer improving
+
+#--------------- 4.4 stepping up to images --------------%
+#recognizing handwritten digits
+#MNIST dataset
+#28*28 grid flattened to 784 values for each image
+#value in each part of array denotes darkness of that pixel
 
 
 
